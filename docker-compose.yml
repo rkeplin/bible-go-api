@@ -1,0 +1,65 @@
+version: '3'
+services:
+  bible-ui:
+    image: rkeplin/bible-angularjs-ui:latest
+    restart: always
+    ports:
+      - 8082:80
+    environment:
+      - URL=${URL}
+      - API_URL=${API_URL}
+    networks:
+      - net1
+
+  go-api:
+    build: .
+    ports:
+      - 8084:3000
+    volumes:
+      - .:/go/src/github.com/rkeplin/bible-go-api
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+    depends_on:
+      - bible-db
+    networks:
+      - net1
+
+  php-api:
+    image: rkeplin/bible-php-api:latest
+    restart: always
+    ports:
+      - 8083:80
+    depends_on:
+      - bible-db
+    environment:
+      - ALLOW_ORIGIN=${ALLOW_ORIGIN}
+      - SERVER_ADMIN=${SERVER_ADMIN}
+      - APP_ENV=${APP_ENV}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+    networks:
+      - net1
+
+  bible-db:
+    image: rkeplin/bible-mariadb:latest
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASS}
+      - MYSQL_DATABASE=${DB_NAME}
+    volumes:
+      - bible-db:/var/lib/mysql
+    networks:
+      - net1
+
+volumes:
+  bible-db:
+
+networks:
+  net1:

@@ -1,0 +1,18 @@
+sudo: required
+services:
+  - docker
+
+env:
+  COMPOSE_VERSION: 1.17.1
+
+before_install:
+ - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+ - chmod +x docker-compose
+ - sudo mv docker-compose /usr/local/bin
+
+script:
+  - make images
+  - make up
+
+after_success:
+  - curl -XPOST https://cloud.docker.com/api/build/v1/source/d827a185-1078-4562-acd3-06ea9e0c6eb1/trigger/${DOCKER_HUB_TRIGGER_TOKEN}/call/
