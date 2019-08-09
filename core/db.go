@@ -28,6 +28,8 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	DB.SetConnMaxLifetime(0)
 }
 
 func WaitForDb() {
