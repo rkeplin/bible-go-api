@@ -1,6 +1,8 @@
 package common
 
-import "strings"
+import (
+	"strings"
+)
 
 type TranslationFactory struct{}
 
@@ -40,6 +42,47 @@ func (t TranslationFactory) GetTable(key string) (table string) {
 		table = "t_nlt"
 	default:
 		table = "t_kjv"
+	}
+
+	return
+}
+
+func (t TranslationFactory) GetIndex(key string) (index string) {
+	key = strings.ToLower(key)
+
+	switch key {
+	case "t_asv":
+	case "asv":
+		index = "asv"
+	case "t_bbe":
+	case "bbe":
+		index = "bbe"
+	case "t_dby":
+	case "dby":
+		index = "dby"
+	case "t_kjv":
+	case "kjv":
+		index = "kjv"
+	case "t_wbt":
+	case "wbt":
+		index = "wbt"
+	case "t_web":
+	case "web":
+		index = "web"
+	case "t_ylt":
+	case "ylt":
+		index = "ylt"
+	case "t_esv":
+	case "esv":
+		index = "esv"
+	case "t_niv":
+	case "niv":
+		index = "niv"
+	case "t_nlt":
+	case "nlt":
+		index = "nlt"
+	default:
+		index = "kjv"
 	}
 
 	return

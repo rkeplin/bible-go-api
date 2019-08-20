@@ -48,6 +48,11 @@ Note: In order to get content for a specific translation, supply `translation` a
 GET http://localhost:8084/verse/[VerseID]/relations 
 ```
 
+#### Search
+```bash
+GET http://localhost:8084/search?query=[Query]
+```
+
 ### Related Projects
 * [Bible Go API](https://www.github.com/rkeplin/bible-go-api)
 * [Bible PHP API](https://www.github.com/rkeplin/bible-php-api)

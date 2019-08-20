@@ -10,6 +10,7 @@ import (
 	"github.com/rkeplin/bible-go-api/relations"
 	"github.com/rkeplin/bible-go-api/text"
 	"github.com/rkeplin/bible-go-api/translation"
+	"github.com/rkeplin/bible-go-api/search"
 )
 
 func main() {
@@ -18,6 +19,7 @@ func main() {
 	book.AddRoutes()
 	genre.AddRoutes()
 	translation.AddRoutes()
+	search.AddRoutes()
 
 	router := core.NewRouter()
 
