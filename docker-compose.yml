@@ -25,6 +25,7 @@ services:
       - DB_PASS=${DB_PASS}
     depends_on:
       - bible-db
+      - bible-es
     networks:
       - net1
 

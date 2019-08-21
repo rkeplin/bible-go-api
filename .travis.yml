@@ -15,4 +15,15 @@ script:
   - make up
 
 after_success:
-  - curl -XPOST https://cloud.docker.com/api/build/v1/source/d827a185-1078-4562-acd3-06ea9e0c6eb1/trigger/${DOCKER_HUB_TRIGGER_TOKEN}/call/
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker build -t rkeplin/bible-go-api:$TRAVIS_BUILD_NUMBER .
+  - docker build -t rkeplin/bible-go-api:latest .
+  - docker push rkeplin/bible-go-api:$TRAVIS_BUILD_NUMBER
+  - docker push rkeplin/bible-go-api:latest
+  - git checkout -- .
+
+deploy:
+  provider: script
+  script: bash $(pwd)/.deploy/deploy.sh
+  on:
+    branch: master
