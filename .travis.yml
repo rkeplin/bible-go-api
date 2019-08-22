@@ -4,6 +4,7 @@ services:
 
 env:
   COMPOSE_VERSION: 1.17.1
+  DOCKER_REPO_SLUG: rkeplin/bible-go-api
 
 before_install:
  - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
@@ -16,11 +17,9 @@ script:
 
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  - docker build -t rkeplin/bible-go-api:$TRAVIS_BUILD_NUMBER .
-  - docker build -t rkeplin/bible-go-api:latest .
-  - docker push rkeplin/bible-go-api:$TRAVIS_BUILD_NUMBER
-  - docker push rkeplin/bible-go-api:latest
-  - git checkout -- .
+  - docker build -t $DOCKER_REPO_SLUG:$TRAVIS_BUILD_NUMBER -t $DOCKER_REPO_SLUG:latest .
+  - docker push $DOCKER_REPO_SLUG:$TRAVIS_BUILD_NUMBER
+  - docker push $DOCKER_REPO_SLUG:latest
 
 deploy:
   provider: script
