@@ -29,7 +29,9 @@ func init() {
 		log.Fatal(err)
 	}
 
-	DB.SetConnMaxLifetime(0)
+	DB.SetConnMaxLifetime(time.Hour)
+	DB.SetMaxOpenConns(5)
+	DB.SetMaxIdleConns(4)
 }
 
 func WaitForDb() {

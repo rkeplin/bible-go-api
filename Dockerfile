@@ -1,4 +1,4 @@
-FROM golang:1.12.6-stretch
+FROM golang:1.12.9-stretch
 
 ENV DB_HOST db
 ENV DB_USER test

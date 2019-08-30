@@ -14,11 +14,11 @@ func (r Repository) FindAll() (TranslationCollection, error) {
 	statement := "SELECT id, `table`, abbreviation, language, version, infoUrl FROM translations ORDER BY version ASC"
 	rows, err := core.DB.Query(statement)
 
+	defer rows.Close()
+
 	if err != nil {
 		return collection, err
 	}
-
-	defer rows.Close()
 
 	var t Translation
 

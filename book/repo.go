@@ -19,11 +19,11 @@ func (r Repository) FindAll() (BookCollection, error) {
 	statement := "SELECT b.id, b.name, b.testament, g.id AS genreId, g.name AS genreName FROM books b LEFT JOIN genres g ON b.genreId = g.id ORDER BY b.id ASC"
 	rows, err := core.DB.Query(statement)
 
+	defer rows.Close()
+
 	if err != nil {
 		return collection, err
 	}
-
-	defer rows.Close()
 
 	var b Book
 
@@ -62,15 +62,14 @@ func (r Repository) FindChapters(bookId int, translation string) (ChapterCollect
 	table := r.translationFactory.GetTable(translation)
 
 	statement := fmt.Sprintf("SELECT DISTINCT(chapterId) AS id FROM %s WHERE bookId = ?", table)
-	fmt.Println(statement)
 
 	rows, err := core.DB.Query(statement, bookId)
+
+	defer rows.Close()
 
 	if err != nil {
 		return collection, err
 	}
-
-	defer rows.Close()
 
 	var c Chapter
 

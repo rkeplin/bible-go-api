@@ -14,11 +14,11 @@ func (r Repository) FindAll() (GenreCollection, error) {
 	statement := "SELECT id, name FROM genres ORDER BY id ASC"
 	rows, err := core.DB.Query(statement)
 
+	defer rows.Close()
+
 	if err != nil {
 		return collection, err
 	}
-
-	defer rows.Close()
 
 	var g Genre
 
