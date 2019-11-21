@@ -28,6 +28,11 @@ func (r Repository) FindAll() (TranslationCollection, error) {
 			return collection, err
 		}
 
+		// Skipping this translation for now, some data is missing from it
+		if t.Abbreviation == "WBT" {
+			continue;
+		}
+
 		collection = append(collection, t)
 	}
 
