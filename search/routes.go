@@ -15,4 +15,11 @@ func AddRoutes() {
 		Pattern:     "/search",
 		HandlerFunc: handler.Search,
 	})
+
+	routes.Add(core.Route{
+		Name:        "SearchAggregator",
+		Method:      "GET",
+		Pattern:     "/searchAggregator",
+		HandlerFunc: handler.SearchAggregator,
+	})
 }

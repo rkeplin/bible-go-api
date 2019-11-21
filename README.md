@@ -51,6 +51,7 @@ GET http://localhost:8084/verse/[VerseID]/relations
 #### Search
 ```bash
 GET http://localhost:8084/search?query=[Query]
+GET http://localhost:8084/searchAggregator?query=[Query]
 ```
 
 ### Related Projects

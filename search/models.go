@@ -19,6 +19,11 @@ type TextCollection struct {
 	Items []Text `json:"items"`
 }
 
+type SearchAggregation struct {
+	Book Book  `json:"book"`
+	Hits int64 `json:"hits"`
+}
+
 type ESHighlight struct {
 	Verse []string `json:"verse"`
 }
@@ -47,6 +52,20 @@ type ESHits struct {
 	Hits  []ESInnerHit `json:"hits"`
 }
 
+type ESBucket struct {
+	Key   int64 `json:"key"`
+	Count int64 `json:"doc_count"`
+}
+
+type ESHitsPerBook struct {
+	Buckets []ESBucket `json:"buckets"`
+}
+
+type ESAggregations struct {
+	HitsPerBook ESHitsPerBook `json:"hitsPerBook"`
+}
+
 type ESResult struct {
-	Hits ESHits `json:"hits"`
+	Hits         ESHits         `json:"hits"`
+	Aggregations ESAggregations `json:"aggregations"`
 }

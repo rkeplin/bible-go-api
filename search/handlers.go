@@ -44,3 +44,25 @@ func (h Handler) Search(w http.ResponseWriter, r *http.Request) {
 
 	core.Respond(w, http.StatusOK, collection)
 }
+
+func (h Handler) SearchAggregator(w http.ResponseWriter, r *http.Request) {
+	queryParams := r.URL.Query()
+	query := queryParams.Get("query")
+	translation := queryParams.Get("translation")
+
+	collection, err := h.repo.SearchAggregator(query, translation)
+
+	if err != nil {
+		response := core.HttpErrorResponse{
+			Code:    400,
+			Status:  "Bad Request",
+			Message: "An error has occurred while aggregating search.",
+		}
+
+		core.Respond(w, http.StatusBadRequest, response)
+
+		return
+	}
+
+	core.Respond(w, http.StatusOK, collection)
+}
