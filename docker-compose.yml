@@ -43,7 +43,7 @@ services:
       - net1
 
   bible-es:
-    image: rkeplin/bible-es:latest
+    image: rkeplin/bible-es:v2
     restart: always
     environment:
       - "discovery.type=single-node"
