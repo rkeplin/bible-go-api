@@ -1,6 +1,6 @@
 # Bible Go API
 
-[![Build Status](https://travis-ci.org/rkeplin/bible-go-api.svg?branch=master)](https://travis-ci.org/rkeplin/bible-go-api)
+[![Build Status](https://travis-ci.com/rkeplin/bible-go-api.svg?branch=master)](https://travis-ci.com/rkeplin/bible-go-api)
 
 Bible Go API is an open source REST API.  It contains multiple translations of The Holy Bible, as well as cross-references. 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY.
