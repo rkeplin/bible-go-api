@@ -84,6 +84,9 @@ func (t TranslationFactory) GetIndex(key string) (index string) {
 	case "t_nlt":
 	case "nlt":
 		index = "nlt"
+	case "t_nlt_2015":
+	case "nlt2015":
+		index = "nlt2015"
 	default:
 		index = "kjv"
 	}
