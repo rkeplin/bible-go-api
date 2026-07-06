@@ -1,0 +1,79 @@
+# MariaDB - bible text data is baked into the rkeplin/bible-mariadb:v2 image.
+#
+# IMPORTANT: No PVC is mounted on purpose. Docker named volumes (used on
+# jersey1/jersey2) copy image data into an empty volume on first use, but
+# k8s PVCs do NOT - mounting a PVC at /var/lib/mysql would hide the baked-in
+# bible data. The bible text is read-only reference data; user-generated data
+# lives in MongoDB. See MIGRATION.md to verify this before cutover.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bible-db
+  namespace: bible
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: bible-db
+  template:
+    metadata:
+      labels:
+        app: bible-db
+    spec:
+      containers:
+        - name: mariadb
+          image: rkeplin/bible-mariadb:v2
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bible-env
+                  key: BIBLE_DB_ROOT_PASS
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: bible-env
+                  key: BIBLE_DB_NAME
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: bible-env
+                  key: BIBLE_DB_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bible-env
+                  key: BIBLE_DB_PASS
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 512Mi
+          readinessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 60
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bible-db
+  namespace: bible
+spec:
+  selector:
+    app: bible-db
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: 3306

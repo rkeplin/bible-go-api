@@ -1,28 +1,17 @@
 version: '3'
 services:
-  bible-ui:
-    image: rkeplin/bible-angularjs-ui:latest
-    restart: always
-    ports:
-      - 8082:80
-    environment:
-      - URL=${URL}
-      - API_URL=${API_URL}
-    networks:
-      - net1
-
   go-api:
     build: .
     ports:
-      - 8084:3000
+      - 3000:3000
     volumes:
       - .:/go/src/github.com/rkeplin/bible-go-api
     environment:
-      - ES_URL=${ES_URL}
-      - DB_NAME=${DB_NAME}
-      - DB_HOST=${DB_HOST}
-      - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASS}
+      - ES_URL=${ES_URL:-http://bible-es:9200}
+      - DB_NAME=${BIBLE_DB_NAME:-bible}
+      - DB_HOST=bible-db
+      - DB_USER=${BIBLE_DB_USER:-bible}
+      - DB_PASS=${BIBLE_DB_PASS:-changeme}
     depends_on:
       - bible-db
       - bible-es
@@ -30,20 +19,20 @@ services:
       - net1
 
   bible-db:
-    image: rkeplin/bible-mariadb:latest
+    image: rkeplin/bible-mariadb:v2
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
-      - MYSQL_USER=${DB_USER}
-      - MYSQL_PASSWORD=${DB_PASS}
-      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${BIBLE_DB_ROOT_PASS:-changeme}
+      - MYSQL_USER=${BIBLE_DB_USER:-bible}
+      - MYSQL_PASSWORD=${BIBLE_DB_PASS:-changeme}
+      - MYSQL_DATABASE=${BIBLE_DB_NAME:-bible}
     volumes:
       - bible-db:/var/lib/mysql
     networks:
       - net1
 
   bible-es:
-    image: rkeplin/bible-es:v2
+    image: rkeplin/bible-es:v3-nlt2015
     restart: always
     environment:
       - "discovery.type=single-node"
