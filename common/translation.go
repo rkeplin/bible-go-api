@@ -40,6 +40,9 @@ func (t TranslationFactory) GetTable(key string) (table string) {
 	case "t_nlt":
 	case "nlt":
 		table = "t_nlt"
+	case "t_nlt_2015":
+	case "nlt2015":
+		table = "t_nlt_2015"
 	default:
 		table = "t_kjv"
 	}
