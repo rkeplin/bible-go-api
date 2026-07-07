@@ -12,18 +12,15 @@ type Repository struct {
 }
 
 func (r Repository) FindAll() (BookCollection, error) {
-	core.WaitForDb()
-
 	collection := BookCollection{}
 
 	statement := "SELECT b.id, b.name, b.testament, g.id AS genreId, g.name AS genreName FROM books b LEFT JOIN genres g ON b.genreId = g.id ORDER BY b.id ASC"
 	rows, err := core.DB.Query(statement)
 
-	defer rows.Close()
-
 	if err != nil {
 		return collection, err
 	}
+	defer rows.Close()
 
 	var b Book
 
@@ -40,8 +37,6 @@ func (r Repository) FindAll() (BookCollection, error) {
 }
 
 func (r Repository) FindOne(id int) (Book, error) {
-	core.WaitForDb()
-
 	var b Book
 
 	statement := "SELECT b.id, b.name, b.testament, g.id AS genreId, g.name AS genreName FROM books b LEFT JOIN genres g ON b.genreId = g.id WHERE b.id = ?"
@@ -55,8 +50,6 @@ func (r Repository) FindOne(id int) (Book, error) {
 }
 
 func (r Repository) FindChapters(bookId int, translation string) (ChapterCollection, error) {
-	core.WaitForDb()
-
 	collection := ChapterCollection{}
 
 	table := r.translationFactory.GetTable(translation)
@@ -65,11 +58,10 @@ func (r Repository) FindChapters(bookId int, translation string) (ChapterCollect
 
 	rows, err := core.DB.Query(statement, bookId)
 
-	defer rows.Close()
-
 	if err != nil {
 		return collection, err
 	}
+	defer rows.Close()
 
 	var c Chapter
 

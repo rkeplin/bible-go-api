@@ -4,8 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"strconv"
@@ -108,28 +107,27 @@ func (r Repository) makeRequest(esQueryStr, translation string) (ESResult, error
 
 	url := os.Getenv("ES_URL") + "/" + index + "/_search"
 
-	fmt.Println("ES URL: ", url)
-	fmt.Println("ES Query: ", esQueryStr)
-
-	var jsonStr = []byte(esQueryStr)
-
-	req, err := http.NewRequest("GET", url, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequest("GET", url, bytes.NewBuffer([]byte(esQueryStr)))
+	if err != nil {
+		return result, err
+	}
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
-
-	defer resp.Body.Close()
-
 	if err != nil {
 		return result, err
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
 		return result, errors.New("Non-200 Response From ES")
 	}
 
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return result, err
+	}
 
 	json.Unmarshal(body, &result)
 

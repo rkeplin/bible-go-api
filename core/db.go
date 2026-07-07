@@ -43,13 +43,13 @@ func WaitForDb() {
 		err = DB.Ping()
 
 		if err == nil {
-			break
+			log.Print("DB connection established.")
+			return
 		}
 
-		if err != nil {
-			log.Print("Waiting for DB connection...")
-
-			time.Sleep(2 * time.Second)
-		}
+		log.Print("Waiting for DB connection...")
+		time.Sleep(2 * time.Second)
 	}
+
+	log.Fatal("Could not connect to DB after max retries.")
 }

@@ -1,18 +1,22 @@
-FROM golang:1.24-bookworm
+# --- Build stage ---
+FROM golang:1.24-bookworm AS builder
 
-ENV DB_HOST db
-ENV DB_USER test
-ENV DB_PASS test
-ENV DB_NAME test
-
-WORKDIR /go/src/github.com/rkeplin/bible-go-api
+WORKDIR /build
 
 COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
 
-RUN go build -o /go/bin/server
-CMD server
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o server
+
+# --- Final stage ---
+FROM debian:bookworm-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /build/server /server
 
 EXPOSE 3000
+
+CMD ["/server"]

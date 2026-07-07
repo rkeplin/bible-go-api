@@ -12,8 +12,6 @@ type Repository struct {
 }
 
 func (r Repository) FindAll(bookId int, chapterId int, translation string) (TextCollection, error) {
-	core.WaitForDb()
-
 	collection := TextCollection{}
 
 	table := r.translationFactory.GetTable(translation)
@@ -21,11 +19,10 @@ func (r Repository) FindAll(bookId int, chapterId int, translation string) (Text
 	statement := fmt.Sprintf("SELECT t.id, t.chapterId, t.verseId, t.verse, b.id, b.name, b.testament FROM %s t INNER JOIN books b ON t.bookId = b.id WHERE t.bookId = ? AND t.chapterId = ? ORDER BY t.id ASC", table)
 	rows, err := core.DB.Query(statement, bookId, chapterId)
 
-	defer rows.Close()
-
 	if err != nil {
 		return collection, err
 	}
+	defer rows.Close()
 
 	var t Text
 
@@ -42,8 +39,6 @@ func (r Repository) FindAll(bookId int, chapterId int, translation string) (Text
 }
 
 func (r Repository) FindOne(id int, translation string) (Text, error) {
-	core.WaitForDb()
-
 	var t Text
 
 	table := r.translationFactory.GetTable(translation)

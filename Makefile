@@ -1,36 +1,34 @@
 NS ?= bible
 
-.PHONY: up down logs build test get api
+.PHONY: up down logs build watch watch-down test
 
-up:
+dev:
 	@echo "============= Spinning Everything Up ============="
-	docker-compose up -d
+	docker compose up -d
 
 down:
 	@echo "============= Taking Everything Down ============="
-	docker-compose down
+	docker compose down
 
 logs:
 	@echo "============= View Logs ============="
-	docker-compose logs -f
+	docker compose logs -f
 
 build:
 	@echo "============= Rebuilding Docker Images ============="
-	docker-compose build
+	docker compose build
 
-get:
-	@echo "============= Go Get It ============="
-	docker exec -it bible-go-api-go-api-1 go get ./
+watch:
+	@echo "============= Starting Dev with Hot Reload ============="
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 
-api:
-	@echo "============= Building API ============="
-	docker exec -it bible-go-api-go-api-1 go build -o /go/bin/server
-	docker container kill bible-go-api-go-api-1
-	docker container start bible-go-api-go-api-1
+watch-down:
+	@echo "============= Taking Dev Down ============="
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml down
 
 test:
 	@echo "============= Running Tests ============="
-	docker exec -it bible-go-api-go-api-1 go test
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml exec go-api go test ./...
 
 push:
 	bin/push.sh

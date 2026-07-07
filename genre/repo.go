@@ -7,18 +7,15 @@ import (
 type Repository struct{}
 
 func (r Repository) FindAll() (GenreCollection, error) {
-	core.WaitForDb()
-
 	collection := GenreCollection{}
 
 	statement := "SELECT id, name FROM genres ORDER BY id ASC"
 	rows, err := core.DB.Query(statement)
 
-	defer rows.Close()
-
 	if err != nil {
 		return collection, err
 	}
+	defer rows.Close()
 
 	var g Genre
 
@@ -35,8 +32,6 @@ func (r Repository) FindAll() (GenreCollection, error) {
 }
 
 func (r Repository) FindOne(id int) (Genre, error) {
-	core.WaitForDb()
-
 	var g Genre
 
 	statement := "SELECT id, name FROM genres WHERE id = ?"

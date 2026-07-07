@@ -1,0 +1,7 @@
+FROM golang:1.24-bookworm
+
+WORKDIR /go/src/github.com/rkeplin/bible-go-api
+
+RUN go install github.com/air-verse/air@latest
+
+CMD ["air"]

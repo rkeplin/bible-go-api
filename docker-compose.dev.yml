@@ -1,0 +1,13 @@
+services:
+  go-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/go/src/github.com/rkeplin/bible-go-api
+      - go-build-cache:/root/.cache/go-build
+      - go-mod-cache:/go/pkg/mod
+
+volumes:
+  go-build-cache:
+  go-mod-cache:

@@ -14,6 +14,8 @@ import (
 )
 
 func main() {
+	core.WaitForDb()
+
 	relations.AddRoutes()
 	text.AddRoutes()
 	book.AddRoutes()
