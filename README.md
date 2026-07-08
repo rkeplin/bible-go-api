@@ -1,7 +1,7 @@
 # Bible Go API
 
 [![Tests](https://github.com/rkeplin/bible-go-api/actions/workflows/test.yml/badge.svg)](https://github.com/rkeplin/bible-go-api/actions/workflows/test.yml)
-[![codecov](https://codecov.io/gh/rkeplin/bible-go-api/branch/master/graph/badge.svg)](https://codecov.io/gh/rkeplin/bible-go-api)
+[![codecov](https://codecov.io/gh/rkeplin/bible-go-api/graph/badge.svg)](https://codecov.io/gh/rkeplin/bible-go-api)
 
 Bible Go API is an open source REST API containing multiple translations of The Holy Bible, as well as cross-references.
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY.
