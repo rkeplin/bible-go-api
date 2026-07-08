@@ -4,7 +4,7 @@ import (
 	"github.com/rkeplin/bible-go-api/core"
 )
 
-var handler = Handler{}
+var handler = Handler{repo: Repository{}}
 
 func AddRoutes() {
 	routes := core.NewRoutes()

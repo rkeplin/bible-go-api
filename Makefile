@@ -1,5 +1,4 @@
 NS ?= bible
-
 .PHONY: up down logs build watch watch-down test
 
 dev:
@@ -28,7 +27,7 @@ watch-down:
 
 test:
 	@echo "============= Running Tests ============="
-	docker compose -f docker-compose.yml -f docker-compose.dev.yml exec go-api go test ./...
+	docker run --rm -v "$(PWD):/app" -w /app golang:1.24-bookworm go test ./...
 
 push:
 	bin/push.sh

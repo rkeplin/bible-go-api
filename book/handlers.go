@@ -8,8 +8,14 @@ import (
 	"github.com/rkeplin/bible-go-api/core"
 )
 
+type Repo interface {
+	FindAll() (BookCollection, error)
+	FindOne(id int) (Book, error)
+	FindChapters(bookId int, translation string) (ChapterCollection, error)
+}
+
 type Handler struct {
-	repo Repository
+	repo Repo
 }
 
 func (h Handler) FindAll(w http.ResponseWriter, r *http.Request) {

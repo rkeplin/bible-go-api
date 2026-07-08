@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ClaudeCodeEditorTabs">
-    <option name="activeSessionId" value="b1e8a63b-aca0-4d69-abdf-12c4748d4fc3" />
+    <option name="activeSessionId" value="ea57be63-f0d7-4b5d-b090-36740e2a3cf5" />
     <option name="openSessionIds">
       <list>
-        <option value="b1e8a63b-aca0-4d69-abdf-12c4748d4fc3" />
+        <option value="ea57be63-f0d7-4b5d-b090-36740e2a3cf5" />
       </list>
     </option>
     <option name="sessionPaths">
       <map>
-        <entry key="b1e8a63b-aca0-4d69-abdf-12c4748d4fc3" value="/sessions/22e5d5e2-463e-4a8d-9144-754b6e59f55d" />
+        <entry key="ea57be63-f0d7-4b5d-b090-36740e2a3cf5" value="/sessions/c86a7ced-6244-48de-9575-1e217eec10e7" />
       </map>
     </option>
     <option name="sessionTitles">
       <map>
-        <entry key="b1e8a63b-aca0-4d69-abdf-12c4748d4fc3" value="i haven't worked on this in a while. let's bring" />
+        <entry key="ea57be63-f0d7-4b5d-b090-36740e2a3cf5" value="i want to make github actions run the the unit tes" />
       </map>
     </option>
   </component>

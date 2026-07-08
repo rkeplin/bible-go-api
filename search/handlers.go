@@ -7,8 +7,13 @@ import (
 	"github.com/rkeplin/bible-go-api/core"
 )
 
+type Repo interface {
+	Search(query, translation string, offset, limit int) (TextCollection, error)
+	SearchAggregator(query, translation string) ([]SearchAggregation, error)
+}
+
 type Handler struct {
-	repo Repository
+	repo Repo
 }
 
 func (h Handler) Search(w http.ResponseWriter, r *http.Request) {
