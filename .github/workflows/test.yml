@@ -30,5 +30,6 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          slug: rkeplin/bible-go-api
           files: coverage.out
           fail_ci_if_error: true
