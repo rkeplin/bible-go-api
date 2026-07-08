@@ -79,6 +79,21 @@ func TestFindOne_NotFound(t *testing.T) {
 	}
 }
 
+func TestFindAllFromChapter_RepoError(t *testing.T) {
+	h := Handler{repo: mockRepo{err: errors.New("db error")}}
+
+	req := httptest.NewRequest("GET", "/books/1/chapters/1", nil)
+	req = mux.SetURLVars(req, map[string]string{"bookId": "1", "chapterId": "1"})
+	w := httptest.NewRecorder()
+
+	defer func() {
+		if r := recover(); r == nil {
+			t.Error("expected panic on repo error, got none")
+		}
+	}()
+	h.FindAllFromChapter(w, req)
+}
+
 func TestFindAllFromChapter_WithTranslation(t *testing.T) {
 	collection := TextCollection{
 		{ID: 1001001, ChapterID: 1, VerseID: 1, Verse: "In the beginning..."},

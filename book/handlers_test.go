@@ -114,3 +114,31 @@ func TestFindChapters_NotFound(t *testing.T) {
 		t.Fatalf("expected 404, got %d", w.Code)
 	}
 }
+
+func TestFindAll_RepoError(t *testing.T) {
+	h := Handler{repo: mockRepo{err: errors.New("db error")}}
+
+	req := httptest.NewRequest("GET", "/books", nil)
+	w := httptest.NewRecorder()
+
+	defer func() {
+		if r := recover(); r == nil {
+			t.Error("expected panic on repo error, got none")
+		}
+	}()
+	h.FindAll(w, req)
+}
+
+func TestFindChapters_WithTranslation(t *testing.T) {
+	chapters := ChapterCollection{{ID: 1}, {ID: 2}}
+	h := Handler{repo: mockRepo{chapters: chapters}}
+
+	req := httptest.NewRequest("GET", "/books/1/chapters?translation=ASV", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "1"})
+	w := httptest.NewRecorder()
+	h.FindChapters(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", w.Code)
+	}
+}

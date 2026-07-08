@@ -77,3 +77,17 @@ func TestFindOne_NotFound(t *testing.T) {
 		t.Fatalf("expected 404, got %d", w.Code)
 	}
 }
+
+func TestFindAll_RepoError(t *testing.T) {
+	h := Handler{repo: mockRepo{err: errors.New("db error")}}
+
+	req := httptest.NewRequest("GET", "/genres", nil)
+	w := httptest.NewRecorder()
+
+	defer func() {
+		if r := recover(); r == nil {
+			t.Error("expected panic on repo error, got none")
+		}
+	}()
+	h.FindAll(w, req)
+}
