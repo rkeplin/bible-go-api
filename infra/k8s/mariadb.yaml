@@ -1,10 +1,19 @@
-# MariaDB - bible text data is baked into the rkeplin/bible-mariadb:v2 image.
-#
-# IMPORTANT: No PVC is mounted on purpose. Docker named volumes (used on
-# jersey1/jersey2) copy image data into an empty volume on first use, but
-# k8s PVCs do NOT - mounting a PVC at /var/lib/mysql would hide the baked-in
-# bible data. The bible text is read-only reference data; user-generated data
-# lives in MongoDB. See MIGRATION.md to verify this before cutover.
+# MariaDB - bible text data is baked into the rkeplin/bible-mariadb:v3 image
+# via /docker-entrypoint-initdb.d, which runs against the (empty) PVC on
+# first mount exactly as it would against any empty datadir.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: bible-db-data
+  namespace: bible
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: do-block-storage-retain
+  resources:
+    requests:
+      storage: 5Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -24,7 +33,7 @@ spec:
     spec:
       containers:
         - name: mariadb
-          image: rkeplin/bible-mariadb:v2
+          image: rkeplin/bible-mariadb:v3
           ports:
             - containerPort: 3306
           env:
@@ -54,6 +63,9 @@ spec:
               memory: 256Mi
             limits:
               memory: 512Mi
+          volumeMounts:
+            - name: mariadb-data
+              mountPath: /var/lib/mysql
           readinessProbe:
             tcpSocket:
               port: 3306
@@ -64,6 +76,10 @@ spec:
               port: 3306
             initialDelaySeconds: 60
             periodSeconds: 20
+      volumes:
+        - name: mariadb-data
+          persistentVolumeClaim:
+            claimName: bible-db-data
 ---
 apiVersion: v1
 kind: Service

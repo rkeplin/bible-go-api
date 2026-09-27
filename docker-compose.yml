@@ -18,7 +18,7 @@ services:
       - net1
 
   bible-db:
-    image: rkeplin/bible-mariadb:v2
+    image: rkeplin/bible-mariadb:v3
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=${BIBLE_DB_ROOT_PASS:-changeme}
