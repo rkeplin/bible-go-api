@@ -27,7 +27,7 @@ watch-down:
 
 test:
 	@echo "============= Running Tests ============="
-	docker run --rm -v "$(PWD):/app" -w /app golang:1.24-bookworm go test ./...
+	docker run --rm -v "$(PWD):/app" -w /app golang:1.27-bookworm go test ./...
 
 push:
 	bin/push.sh
@@ -45,11 +45,9 @@ k8s-deploy: k8s-namespace k8s-secret
 	kubectl apply -f infra/k8s/mariadb.yaml
 	kubectl apply -f infra/k8s/elasticsearch.yaml
 	kubectl apply -f infra/k8s/deployment.yaml
-	kubectl apply -f infra/k8s/ingress.yaml
 
 .PHONY: k8s-delete
 k8s-delete:
-	-kubectl delete -f infra/k8s/ingress.yaml
 	-kubectl delete -f infra/k8s/deployment.yaml
 	-kubectl delete -f infra/k8s/elasticsearch.yaml
 	-kubectl delete -f infra/k8s/mariadb.yaml
