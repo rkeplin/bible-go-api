@@ -25,5 +25,5 @@ func main() {
 
 	router := core.NewRouter()
 
-	log.Fatal(http.ListenAndServe(":3000", router))
+	log.Fatal(http.ListenAndServe(":3000", core.CORS(router, core.CORSOriginsFromEnv())))
 }
