@@ -114,3 +114,21 @@ func TestCORSOriginsFromEnv(t *testing.T) {
 		t.Errorf("set: got %q", got)
 	}
 }
+
+// A handler panic used to surface as ingress-nginx's 502 with CORS headers.
+func TestRecoverKeepsCORSOnPanic(t *testing.T) {
+	boom := http.HandlerFunc(func(http.ResponseWriter, *http.Request) { panic("boom") })
+	h := CORS(Recover(boom), DefaultCORSOrigins)
+
+	req := httptest.NewRequest("GET", "/books/abc", nil)
+	req.Header.Set("Origin", "https://bible-ui.rkeplin.com")
+	w := httptest.NewRecorder()
+	h.ServeHTTP(w, req)
+
+	if w.Code != http.StatusBadGateway {
+		t.Errorf("status = %d, want 502", w.Code)
+	}
+	if got := w.Header().Get("Access-Control-Allow-Origin"); got != "https://bible-ui.rkeplin.com" {
+		t.Errorf("Access-Control-Allow-Origin = %q", got)
+	}
+}
